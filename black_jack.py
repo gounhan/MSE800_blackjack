@@ -14,6 +14,10 @@ import random
 from art import logo
 
 
+# Define the logo using the art module
+logo = art.text2art("Blackjack")
+
+
 def deal_card():
     """Returns a random card from the deck."""
     cards = [11, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10]
@@ -60,8 +64,47 @@ def compare(user_score, computer_score):
         return "You lose 😤"
 
 
-
 def play_game():
+    """Play a game of Blackjack."""
+    # print(logo)  # Display the logo
+
+    # Deal initial cards to user and computer
+    user_cards = [deal_card(), deal_card()]
+    computer_cards = [deal_card(), deal_card()]
+
+    game_over = False
+
+    # User's turn
+    while not game_over:
+        user_score = calculate_score(user_cards)
+        computer_score = calculate_score(computer_cards)
+
+        print(f"Your cards: {user_cards}, current score: {user_score}")
+        print(f"Computer's first card: {computer_cards[0]}")
+
+        # Check if the user or computer has a blackjack or user is over 21
+        if user_score == 0 or computer_score == 0 or user_score > 21:
+            game_over = True
+        else:
+            # Ask the user if they want to draw another card
+            should_continue = input("Type 'y' to get another card, type 'n' to pass: ")
+            if should_continue == 'y':
+                user_cards.append(deal_card())
+            else:
+                game_over = True
+
+    # Computer's turn
+    computer_score = calculate_score(computer_cards)  # Update score after user's turn
+    while computer_score != 0 and computer_score < 17:
+        computer_cards.append(deal_card())
+        computer_score = calculate_score(computer_cards)
+
+    print(f"Your final hand: {user_cards}, final score: {user_score}")
+    print(f"Computer's final hand: {computer_cards}, final score: {computer_score}")
+
+    # Compare scores and determine the result
+    result = compare(user_score, computer_score)
+    print(result)
 
     # Hint 5: Deal the user and computer 2 cards each using deal_card()
     # Hint 9: Call calculate_score(). If the computer or the user has a blackjack (0) or if the user's score is over 21, then the game ends.
